@@ -3,6 +3,8 @@ import Tareas from "./components/Tareas"
 import AddTarea from "./components/AddTarea"
 import { useState } from "react"
 function App() {
+
+  const [mostrarForm,setMostrarForm]= useState(false)
   const [tareas,setTareas]=useState([
     {
       id: 1,
@@ -26,7 +28,6 @@ function App() {
 
   //eliminar una tarea
   const borrarTarea = (id) =>{
- /*   console.log('borrar', id); */
  setTareas(tareas.filter((tarea) => tarea.id !==id ))
 
   }
@@ -34,16 +35,21 @@ function App() {
   //marcaro desmarcar tarea como terminada
 
   const toggleTarea = (id) => {
-    /* console.log('terminada', id); */
     setTareas(tareas.map((tarea) => tarea.id === id ? {...tarea,terminada: !tarea.terminada} :tarea))
   }
 
   //Agregar tarea
+  const addTarea = (tarea) =>{
+    const id = Math.floor(Math.random() * 10000) + 1
+   const nuevaTarea={id,...tarea}
+   setTareas([...tareas,nuevaTarea])
+  }
+
 
   return (
     <div className ='container'>
-      <Header />
-      <AddTarea />
+      <Header onAdd={() => setMostrarForm(!mostrarForm)} mostrarForm={mostrarForm} />
+      {mostrarForm && <AddTarea  onAdd={addTarea} />}
      {tareas.length > 0 ? <Tareas tareas={tareas} onDelete={borrarTarea} onToggle={toggleTarea}/> :'No hay tareas para mostrar'}
     
     </div>
